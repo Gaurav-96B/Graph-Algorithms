@@ -1,0 +1,50 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main (String[] args) {
+	    int t;
+	    Scanner sc=new Scanner(System.in);
+	    t=sc.nextInt();
+	    sc.nextLine();
+	    while(t-->0)
+	    {
+	        int n=sc.nextInt();
+	        int m=sc.nextInt();
+	        int image[][]=new int[n][m];
+	        for(int i=0;i<n;i++)
+	        {
+	            for(int j=0;j<m;j++)
+	            {
+	                image[i][j]=sc.nextInt();
+	            }
+	        }
+	        int x=sc.nextInt();
+	        int y=sc.nextInt();
+	        int newcolor=sc.nextInt();
+	        dfs(image,x,y,newcolor,image[x][y],n,m);
+	        for(int i=0;i<n;i++)
+	        {
+	            for(int j=0;j<m;j++)
+	            {
+	                System.out.print(image[i][j]+" ");
+	            }
+	   
+	        }
+	        System.out.println();
+	    }
+}
+        static void dfs(int image[][],int x,int y,int newcolor,int oldcolor,int n,int m)
+        {
+            if(x<0 || x>=n || y<0 || y>=m || image[x][y]==newcolor ||image[x][y]!=oldcolor)
+            {
+                return;
+            }
+            image[x][y]=newcolor;
+            dfs(image,x-1,y,newcolor,oldcolor,n,m);
+            dfs(image,x+1,y,newcolor,oldcolor,n,m);
+            dfs(image,x,y-1,newcolor,oldcolor,n,m);
+            dfs(image,x,y+1,newcolor,oldcolor,n,m);
+        }
+}
