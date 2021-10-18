@@ -1,17 +1,12 @@
-class Solution
-{
-    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj)
-    {
-        if(V==0)
-        {
-            return false;
-        }
+class Solution {
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
         boolean visited[]=new boolean[V];
         for(int i=0;i<V;i++)
         {
             if(visited[i]==false)
             {
-                if(dfs(adj,i,-1,visited))
+                boolean ans=dfs(adj,visited,i,-1);
+                if(ans==true)
                 {
                     return true;
                 }
@@ -19,24 +14,24 @@ class Solution
         }
         return false;
     }
-    static boolean dfs(ArrayList<ArrayList<Integer>> list,int at,int parent,boolean visited[])
+    public boolean dfs(ArrayList<ArrayList<Integer>> adj,boolean visited[],int src,int parent)
     {
-        visited[at]=true;
-        ArrayList<Integer> ls=list.get(at);
-        for(Integer i: ls)
+        visited[src]=true;
+        for(int adjacent:adj.get(src))
         {
-            if(visited[i]==false)
+            if(visited[adjacent]==false)
             {
-                if(dfs(list,i,at,visited))
+                boolean ans=dfs(adj,visited,adjacent,src);
+                if(ans==true)
                 {
                     return true;
                 }
             }
-            else if(i!=parent)
+            else if(adjacent!=parent)
             {
-                return true;
+              return true;  
             }
         }
-        return false; 
+        return false;
     }
 }
