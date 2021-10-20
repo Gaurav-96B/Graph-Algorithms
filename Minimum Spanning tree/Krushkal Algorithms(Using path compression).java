@@ -1,7 +1,7 @@
 import java.util.*; 
 class Node 
 {
-	  private int u;
+    private int u;
     private int v;
     private int weight;
     Node(int _u, int _v, int _w) 
