@@ -1,41 +1,42 @@
 class Node
 {
-    int u,w;
-    Node(int u,int w)
+    int v,w;
+    Node(int v,int w)
     {
-        this.u=u;
+        this.v=v;
         this.w=w;
     }
 }
 class Solution {
      public int networkDelayTime(int[][] times, int N, int K) {
-         ArrayList<ArrayList<ArrayList<Integer>>>graph=buildGraph(N,times);
-         boolean visited[]=new boolean [N];
-         int distance[]=new int[N];
-         Arrays.fill(distance,Integer.MAX_VALUE);
-         distance[K-1]=0;
-         PriorityQueue<Node>pq=new PriorityQueue<>((a,b)->{return a.w-b.w;});
-         pq.add(new Node(K-1,0));
-         while(!pq.isEmpty())
-         {
-             Node temp=pq.peek();
-             pq.poll();
-             int u=temp.u;
-             int w=temp.w;
-             visited[u]=true;
-             for(ArrayList<Integer>adjacent:graph.get(u))
-             {
-                 int adjacentU=adjacent.get(0);
-                 int adjacentW=adjacent.get(1);
-                 if(visited[adjacentU]==false&&distance[adjacentU]>adjacentW+temp.w)
-                 {
-                    distance[adjacentU]=adjacentW+temp.w;
-                    pq.add(new Node(adjacentU,adjacentW+temp.w));
-                 }
-             }
-         }
+       ArrayList<ArrayList<ArrayList<Integer>>>graph=buildGraph(times,N);
+       boolean visited[]=new boolean[N];
+       int distance[]=new int[N];
+       Arrays.fill(distance,Integer.MAX_VALUE);
+       distance[K-1]=0;
+       PriorityQueue<Node>pq=new PriorityQueue<Node>((a,b)->{return a.w-b.w;});
+       pq.add(new Node(K-1,0));
+       while(!pq.isEmpty())
+       {
+           Node src=pq.peek();
+           pq.poll();
+           int srcV=src.v;
+           int srcW=src.w;
+           visited[srcV]=true;
+           for(ArrayList<Integer>adjacent:graph.get(srcV))
+           {
+               int adjacentV=adjacent.get(0);
+               int adjacentW=adjacent.get(1);
+               if(visited[adjacentV]==false&&distance[adjacentV]>srcW+adjacentW)
+               {
+                 distance[adjacentV]=srcW+adjacentW;
+                 pq.add(new Node(adjacentV,srcW+adjacentW));
+               }
+           }
+           
+       }
          int max=Integer.MIN_VALUE;
-         for(int i=0;i<N;i++)
+         for(int i=0;i<distance.length;i++)
          {
              if(distance[i]==Integer.MAX_VALUE)
              {
@@ -44,25 +45,26 @@ class Solution {
              max=Math.max(max,distance[i]);
          }
          return max;
-    }
-public ArrayList<ArrayList<ArrayList<Integer>>> buildGraph(int V,int[][] times)
-{
-    ArrayList<ArrayList<ArrayList<Integer>>>graph =new ArrayList<ArrayList<ArrayList<Integer>>>();
-    for(int i=0;i<V;i++)
-    {
-       graph.add(new ArrayList<ArrayList<Integer>>());
-    }
-    for(int edges[]:times)
-    {
-       int u=edges[0]-1;
-       int v=edges[1]-1;
-       int w=edges[2];
-       ArrayList<Integer>vNode=new ArrayList<>();
-       vNode.add(v);
-       vNode.add(w);
        
-       graph.get(u).add(vNode);
+     }
+    public ArrayList<ArrayList<ArrayList<Integer>>> buildGraph(int times[][],int N)
+    {
+        ArrayList<ArrayList<ArrayList<Integer>>>graph=new ArrayList<ArrayList<ArrayList<Integer>>>();
+        for(int i=0;i<N;i++)
+        {
+            graph.add(new ArrayList<ArrayList<Integer>>());
+        }
+        for(int i=0;i<times.length;i++)
+        {
+            int u=times[i][0]-1;
+            int v=times[i][1]-1;
+            int w=times[i][2];
+            ArrayList<Integer>node=new ArrayList<Integer>();
+            node.add(v);
+            node.add(w);
+            graph.get(u).add(node);
+        }
+        return graph;
     }
-    return graph;
-}
+    
 }
